@@ -4,7 +4,8 @@ import TodoInput from './TodoInput'
 
 export default class TodoList extends Component {
   constructor(props) {
-    super(props);
+    super(props)
+    this.setInputValue = this.setInputValue.bind(this);
     this.state = { 
         todos: [
             {name: 'one', key: 1},
@@ -23,7 +24,8 @@ export default class TodoList extends Component {
     this.setState({textInput: value})
   }
 
-  render() {      
+  render() {   
+    const value = this.state.textInput   
     return (
       <div className="todo_list">
         <div> Num todos: {this.state.todos.length} </div>
@@ -33,7 +35,11 @@ export default class TodoList extends Component {
                 name={item.name} 
             />
         )}
-        <TodoInput />
+        <TodoInput 
+          value={value}
+          handleValueChange={this.setInputValue}
+        />
+        <div>Value: {this.state.textInput}</div>
       </div>
     )
   }
