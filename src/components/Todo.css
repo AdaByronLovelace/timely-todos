@@ -1,0 +1,57 @@
+input {
+    line-height: 200%;
+}
+
+/* Tag */
+.tag {
+    font-size: 10px;
+    padding: 3px;
+    border-radius: 5px;
+    margin: 3px;
+    background: lightblue;
+}
+
+/* Todo */
+.todoarea {
+    position: relative;
+}
+.todolist {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 900px;
+}
+.todo {
+    margin: 10px;
+    padding: 10px;
+}
+
+.todo .text {
+    font-size: 12px;
+}
+
+.todo .text.done {
+    text-decoration: line-through;
+}
+
+.todo .text.todo {
+    text-decoration: none
+}
+
+/* Temperature */
+
+.todo.cold {
+    background: white;
+}
+.todo.cool {
+    background: lightyellow;
+}
+.todo.tepid {
+    background: yellow;
+}
+.todo.warm {
+    background: orange;
+}
+.todo.hot {
+    background: red;
+}
