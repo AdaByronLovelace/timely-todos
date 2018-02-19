@@ -9,12 +9,13 @@ export default class TodoList extends React.Component {
     this.handleDateChange = this.handleDateChange.bind(this)
     this.handleTagChange = this.handleTagChange.bind(this)
     this.addTodo = this.addTodo.bind(this)
-    this.state = { 
-        todos: [
-            {name: 'one', key: 1, tag: 'tag1'},
-            {name: 'two', key: 2, desc: 'this is number two'},
-            {name: 'three', key: 3, date: 'date'}
-        ],
+    this.state = {
+        localStore: 'timelytodos', 
+        todos: [],
+        //     0: {name: 'one', key: 1, tag: 'tag1'},
+        //     1: {name: 'two', key: 2, desc: 'this is number two'},
+        //     2: {name: 'three', key: 3, date: 'date'}
+        // },
         nameInput: '',
         dateInput: '',
         tagInput: '',
@@ -26,21 +27,34 @@ export default class TodoList extends React.Component {
     }
   }
 
-  handleSubmit(event) {
-    alert('An essay was submitted: ' + this.state.value);
-    event.preventDefault();
+  componentDidMount() {
+    this.getData()
+  }
+
+  getData() {
+    let data = Object.values(JSON.parse(localStorage.getItem(this.state.localStore)))
+    if (typeof data !== undefined) {
+      this.setState({todos: data})
+    }
+  }
+
+  setData() {
+    let dataStr = JSON.stringify(this.state.todos) 
+    localStorage.setItem(this.state.localStore, dataStr)
   }
 
   addTodo(event) {
-    this.setState({ todos: [...this.state.todos, 
-      {
-        name: this.state.nameInput,
-        key: this.state.todos.length + 1,
-        tag: this.state.tagInput,
-        deadlineDate: new Date(this.state.dateInput),
-        createdDate: new Date()
-      }
-    ] })
+    let newTodo = {
+      name: this.state.nameInput,
+      key: this.state.todos.length + 1,
+      tag: this.state.tagInput,
+      deadlineDate: new Date(this.state.dateInput),
+      createdDate: new Date()
+    }
+    let newTodos = this.state.todos
+    newTodos.push(newTodo)
+    this.setState(newTodos)
+    this.setData()
     event.preventDefault()
   }
 

@@ -18,6 +18,7 @@ export default class Todo extends React.Component {
   }
 
   tempClass() {
+    // eslint-disable-next-line
     switch (this.state.temp) {
       case 0: return 'cold'
       case 1: return 'cool'
