@@ -7,7 +7,7 @@ export default class Todo extends React.Component {
     this.handleCheck = this.handleCheck.bind(this)
     this.state = {
       done: false,
-      temp: 0
+      temp: 2
     }
   }
 
@@ -32,16 +32,24 @@ export default class Todo extends React.Component {
     this.setState({done: event.target.checked})
   }
 
+// TODO: fix the input so only the span exists, and maybe convert label to flexbox
+
   render() {
     return (
       <div className={`todo ${this.tempClass()}`}>
-        <input type="checkbox" 
-          onChange={this.handleCheck} 
-          defaultChecked={this.props.done}/>
-        <div className={`text ${this.state.done ? 'done' : 'todo'}`}>{ this.props.name }</div>
-        <div className="temp">{ this.getTemperature() }</div>
-        <div className="tag">{ this.props.tag }</div>
-        <div className="due">{ this.props.deadlineDate.toString() }</div>
+        <label className={`text ${this.state.done ? 'done' : 'todo'}`}>
+          <input type="checkbox" 
+            onChange={this.handleCheck} 
+            defaultChecked={this.props.done}/>
+          <span class="checkmark"></span>
+          { this.props.name }
+          <span class="delete"></span>
+        </label>
+        <div className="bottom">
+          <div className="tag">{ this.props.tag }</div>
+          <div className="due">Due on { this.props.deadlineDate.toLocaleDateString("en-US") }</div>
+        </div>
+        
         <div className="desc">{ this.props.desc }</div>
       </div>
     )
