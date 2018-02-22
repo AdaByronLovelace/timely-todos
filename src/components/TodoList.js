@@ -12,6 +12,8 @@ export default class TodoList extends React.Component {
     this.removeTodo = this.removeTodo.bind(this)
     this.handleDone = this.handleDone.bind(this)
     this.getTemperature = this.getTemperature.bind(this)
+    this.compareTemps = this.compareTemps.bind(this)
+    this.sortByTemp = this.sortByTemp.bind(this)
 
     this.state = {
         localStore: 'timelytodos', 
@@ -29,13 +31,12 @@ export default class TodoList extends React.Component {
 
   componentDidMount() {
     this.getData()
-    this.sortByTemp()
   }
 
   getData() {
     let data = localStorage.getItem(this.state.localStore)
     if (data !== null) {
-      this.setState({todos:  Object.values(JSON.parse(data))})
+      this.setState({todos:  this.sortByTemp(Object.values(JSON.parse(data)))})
     }
   }
 
@@ -68,10 +69,9 @@ export default class TodoList extends React.Component {
       createdDate: new Date(),
       done: false
     }
-    console.log(`creating deadline ${newTodo.deadlineDate}`)
     let newTodos = this.state.todos
     newTodos.push(newTodo)
-    this.setState(newTodos)
+    this.setState({todos: this.sortByTemp(newTodos)})
     this.setData()
   }
 
@@ -96,7 +96,6 @@ export default class TodoList extends React.Component {
           createdDate: todo.createdDate,
           done: !todo.done
         }
-        console.log(`done with deadline ${todo.deadlineDate}`)
       } else {
         return todo
       }
@@ -104,19 +103,18 @@ export default class TodoList extends React.Component {
     newTodos.push(newTodo)
     this.setState({todos: newTodos})
   }
-
-  // TODO: Sort it right, remember to put dones on bottom
-  sortByTemp() {
-    let sortedTodos = []
-    let compare = function(a,b) {
-      if (a.done) {
-        return -1
-      } else {
-        return a.temp < b.temp
-      }
+  compareTemps(a,b) {
+    let aTemp = this.getTemperature(a.deadlineDate)
+    let bTemp = this.getTemperature(b.deadlineDate)
+    if (a.done) {
+      return -1
+    } else {
+      return aTemp > bTemp
     }
-    sortedTodos = this.state.todos.sort(compare)
-    // console.log(sortedTodos)
+  }
+
+  sortByTemp(unsorted) {
+    return unsorted.sort(this.compareTemps)
   }
 
   handleNameChange(event) {

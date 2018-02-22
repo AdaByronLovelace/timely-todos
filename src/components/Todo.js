@@ -25,7 +25,6 @@ export default class Todo extends React.Component {
   }
 
   getDate(date) {
-    console.log(`in Todo component deadline ${date}`)
     let dateObj = new Date(date)
     return dateObj.toLocaleDateString("en-US")
   }
