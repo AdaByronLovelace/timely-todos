@@ -29,6 +29,7 @@ export default class TodoList extends React.Component {
 
   componentDidMount() {
     this.getData()
+    this.sortByTemp()
   }
 
   getData() {
@@ -51,10 +52,13 @@ export default class TodoList extends React.Component {
   }
 
   addTodo(event) {
+    event.preventDefault()
     let id = 0 
     let last = this.state.todos.length - 1
     if (last > 0) {
       id = this.state.todos[last].id + 1
+    } else if (last === 0) {
+      id = 1
     }
     let newTodo = {
       name: this.state.nameInput,
@@ -64,11 +68,11 @@ export default class TodoList extends React.Component {
       createdDate: new Date(),
       done: false
     }
+    console.log(`creating deadline ${newTodo.deadlineDate}`)
     let newTodos = this.state.todos
     newTodos.push(newTodo)
     this.setState(newTodos)
     this.setData()
-    event.preventDefault()
   }
 
   removeTodo(id) {
@@ -92,12 +96,27 @@ export default class TodoList extends React.Component {
           createdDate: todo.createdDate,
           done: !todo.done
         }
+        console.log(`done with deadline ${todo.deadlineDate}`)
       } else {
         return todo
       }
     })
     newTodos.push(newTodo)
     this.setState({todos: newTodos})
+  }
+
+  // TODO: Sort it right, remember to put dones on bottom
+  sortByTemp() {
+    let sortedTodos = []
+    let compare = function(a,b) {
+      if (a.done) {
+        return -1
+      } else {
+        return a.temp < b.temp
+      }
+    }
+    sortedTodos = this.state.todos.sort(compare)
+    // console.log(sortedTodos)
   }
 
   handleNameChange(event) {
@@ -123,13 +142,13 @@ export default class TodoList extends React.Component {
                   key={item.id} 
                   id={item.id}
                   name={item.name} 
-                  tags={item.tags}
-                  desc={item.desc}
-                  duedate={item.date}
-                  onDelete={this.removeTodo}
+                  tag={item.tag}
+                  deadlineDate={item.deadlineDate}
+                  createdDate={item.createdDate}
                   done={item.done}
+                  temp={this.getTemperature(item.deadlineDate)}
                   onDone={this.handleDone}
-                  temp={this.getTemperature(item.createdDate)}
+                  onDelete={this.removeTodo}
               />
           )}
         </div>
