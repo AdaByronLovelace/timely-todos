@@ -13,7 +13,8 @@ export default class TodoList extends React.Component {
     this.handleDone = this.handleDone.bind(this)
     this.getTemperature = this.getTemperature.bind(this)
     this.compareTemps = this.compareTemps.bind(this)
-    this.sortByTemp = this.sortByTemp.bind(this)
+    this.updateTodos = this.updateTodos.bind(this)
+    this.getNextId = this.getNextId.bind(this)
 
     this.state = {
         localStore: 'timelytodos', 
@@ -29,14 +30,18 @@ export default class TodoList extends React.Component {
     }
   }
 
+  // Lifecycle Events
+
   componentDidMount() {
     this.getData()
   }
 
+  // Local Storage 
+
   getData() {
     let data = localStorage.getItem(this.state.localStore)
     if (data !== null) {
-      this.setState({todos:  this.sortByTemp(Object.values(JSON.parse(data)))})
+      this.updateTodos(Object.values(JSON.parse(data)), false)
     }
   }
 
@@ -45,25 +50,13 @@ export default class TodoList extends React.Component {
     localStorage.setItem(this.state.localStore, dataStr)
   }
 
-  getTemperature(created) {
-    const now = new Date()
-    const create = new Date(created)
-    let timeDiff = Math.abs(now.getTime() - create.getTime());
-    return Math.floor(timeDiff / (1000 * 3600 * 24));
-  }
+  // Todos Add, Change, Delete
 
   addTodo(event) {
     event.preventDefault()
-    let id = 0 
-    let last = this.state.todos.length - 1
-    if (last > 0) {
-      id = this.state.todos[last].id + 1
-    } else if (last === 0) {
-      id = 1
-    }
     let newTodo = {
       name: this.state.nameInput,
-      id: id,
+      id: this.getNextId(),
       tag: this.state.tagInput,
       deadlineDate: new Date(this.state.dateInput),
       createdDate: new Date(),
@@ -71,16 +64,14 @@ export default class TodoList extends React.Component {
     }
     let newTodos = this.state.todos
     newTodos.push(newTodo)
-    this.setState({todos: this.sortByTemp(newTodos)})
-    this.setData()
+    this.updateTodos(newTodos)
   }
 
   removeTodo(id) {
     let newTodos = this.state.todos.filter((todo) => {
       return todo.id !== id
     })
-    this.setState({todos: newTodos})
-    this.setData()
+    this.updateTodos(newTodos)
   }
 
   handleDone(id) {
@@ -101,21 +92,47 @@ export default class TodoList extends React.Component {
       }
     })
     newTodos.push(newTodo)
-    this.setState({todos: newTodos})
+    this.updateTodos(newTodos)
   }
+
+  updateTodos(newTodos, set) {
+    this.setState({todos: newTodos}, () =>
+      this.setData()
+    )
+  }
+
+  // Helper Functions
+
+  getTemperature(created) {
+    const now = new Date()
+    const create = new Date(created)
+    let timeDiff = Math.abs(now.getTime() - create.getTime());
+    return Math.floor(timeDiff / (1000 * 3600 * 24));
+  }
+
   compareTemps(a,b) {
     let aTemp = this.getTemperature(a.deadlineDate)
     let bTemp = this.getTemperature(b.deadlineDate)
-    if (a.done) {
-      return -1
-    } else {
-      return aTemp > bTemp
-    }
+
+    if ((a.done && b.done) || (!a.done && !b.done)) {
+      if (aTemp < bTemp) return -1
+      else if (bTemp < aTemp) return 1
+      else return 0
+    } 
+    else if (a.done) return 1
+    else return -1
   }
 
-  sortByTemp(unsorted) {
-    return unsorted.sort(this.compareTemps)
+  getNextId() {
+    var next = 0
+    // eslint-disable-next-line 
+    while (this.state.todos.filter(e => e.id === next).length > 0) {
+      next = Math.floor(Math.random()*10000)
+    }
+    return next
   }
+
+  // Input changes (TODO: Get rid of)
 
   handleNameChange(event) {
     this.setState({nameInput: event.target.value})
@@ -135,14 +152,16 @@ export default class TodoList extends React.Component {
         <h2>todos</h2>
         <div> Num todos: {this.state.todos.length} </div>
         <div className="todolist">
-          { this.state.todos.map(item =>
+          { [].concat(this.state.todos)
+            .sort(this.compareTemps)
+            .map(item =>
               <Todo 
                   key={item.id} 
                   id={item.id}
                   name={item.name} 
                   tag={item.tag}
-                  deadlineDate={item.deadlineDate}
-                  createdDate={item.createdDate}
+                  deadlineDate={item.deadlineDate.toString()}
+                  createdDate={item.createdDate.toString()}
                   done={item.done}
                   temp={this.getTemperature(item.deadlineDate)}
                   onDone={this.handleDone}
