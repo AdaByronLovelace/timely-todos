@@ -4,53 +4,46 @@ import PropTypes from 'prop-types'
 export default class Todo extends React.Component {
   constructor(props) {
     super(props)
-    this.handleCheck = this.handleCheck.bind(this)
-    this.state = {
-      done: false,
-      temp: 2
-    }
+    this.handleDelete = this.handleDelete.bind(this)
+    this.handleDone = this.handleDone.bind(this)
   }
 
-  getTemperature(created) {
-    const now = new Date()
-    let diff = now - this.props.deadlineDate
-    return diff.toString()
+  tempClass(temp) {
+    if (temp < 2) return 'hot'
+    else if (temp < 4) return 'warm'
+    else if (temp < 7) return 'tepid'
+    else if (temp < 14) return 'cool'
+    else return 'cold'
   }
 
-  tempClass() {
-    // eslint-disable-next-line
-    switch (this.state.temp) {
-      case 0: return 'cold'
-      case 1: return 'cool'
-      case 2: return 'tepid'
-      case 3: return 'warm'
-      case 4: return 'hot'
-    }
+  handleDelete(event) {
+    this.props.onDelete(this.props.id)
   }
 
-  handleCheck(event) {
-    this.setState({done: event.target.checked})
+  handleDone(event) {
+    this.props.onDone(this.props.id)
   }
-
-// TODO: fix the input so only the span exists, and maybe convert label to flexbox
 
   render() {
     return (
-      <div className={`todo ${this.tempClass()}`}>
-        <label className={`text ${this.state.done ? 'done' : 'todo'}`}>
-          <input type="checkbox" 
-            onChange={this.handleCheck} 
-            defaultChecked={this.props.done}/>
-          <span class="checkmark"></span>
+      <div className={`todo ${this.tempClass(this.props.temp)}`}>
+        <div className={`text ${this.props.done ? 'done' : 'open'}`}>
+          <span className="checkbox-container" 
+            onClick={this.handleDone}>
+            <input type="checkbox" />
+            <span className="checkmark"></span>
+          </span>
           { this.props.name }
-          <span class="delete"></span>
-        </label>
+          <span 
+            onClick={this.handleDelete}
+            className="delete">
+          </span>
+        </div>
         <div className="bottom">
           <div className="tag">{ this.props.tag }</div>
+          <div>TEMP {this.props.temp}</div>
           <div className="due">Due on { this.props.deadlineDate.toLocaleDateString("en-US") }</div>
         </div>
-        
-        <div className="desc">{ this.props.desc }</div>
       </div>
     )
   }
@@ -61,7 +54,7 @@ Todo.defaultProps = {
   createdDate: new Date(),
   deadlineDate: new Date(),
   name: '',
-  desc: ''
+  done: false
 }
 
 Todo.propTypes = {
@@ -69,5 +62,5 @@ Todo.propTypes = {
   createdDate: PropTypes.instanceOf(Date),
   deadlineDate: PropTypes.instanceOf(Date),
   name: PropTypes.string,
-  desc: PropTypes.string
+  done: PropTypes.bool
 }

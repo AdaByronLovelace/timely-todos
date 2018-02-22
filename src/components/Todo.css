@@ -36,15 +36,15 @@ div.todo {
   border-bottom: darkgray 2px solid;
 }
 
-label.text.done {
+div.text.done {
   text-decoration: line-through;
 }
 
-label.text.todo {
+div.text.open {
   text-decoration: none
 }
 
-label.text {
+div.text {
   display: block;
   position: relative;
   padding-left: 45px;
@@ -55,7 +55,7 @@ label.text {
 	text-align: left;
 }
 
-label.text input[type="checkbox"] {
+div.text input[type="checkbox"] {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -72,7 +72,7 @@ label.text input[type="checkbox"] {
   background-color: #eee;
 }
 
-label.text .checkmark::hover {
+div.text .checkmark::hover {
   background-color: #ccc;
 }
 
@@ -87,7 +87,7 @@ label.text .checkmark::hover {
   font-size: 80%;
 }
 
-label.text.done .checkmark {
+div.text.done .checkmark {
   background-color: darkgray;
 }
 
@@ -97,11 +97,11 @@ label.text.done .checkmark {
   display: none;
 }
 
-label.text.done .checkmark::after {
+div.text.done .checkmark::after {
   display: block;
 }
 
-label.text .checkmark::after {
+div.text .checkmark::after {
   left: 9px;
   top: 5px;
   width: 5px;
@@ -132,7 +132,7 @@ label.text .checkmark::after {
   position: absolute;
 }
 
-label.text .delete::before {
+div.text .delete::before {
   left: 14px;
 	top: 8px;
 	width: 15px;
@@ -144,7 +144,7 @@ label.text .delete::before {
 	transform: rotate(135deg);
 }
 
-label.text .delete::after {
+div.text .delete::after {
 	left: 13px;
 	top: -7px;
 	width: 15px;
