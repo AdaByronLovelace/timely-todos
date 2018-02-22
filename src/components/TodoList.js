@@ -12,10 +12,6 @@ export default class TodoList extends React.Component {
     this.state = {
         localStore: 'timelytodos', 
         todos: [],
-        //     0: {name: 'one', key: 1, tag: 'tag1'},
-        //     1: {name: 'two', key: 2, desc: 'this is number two'},
-        //     2: {name: 'three', key: 3, date: 'date'}
-        // },
         nameInput: '',
         dateInput: '',
         tagInput: '',
@@ -70,8 +66,7 @@ export default class TodoList extends React.Component {
     this.setState({tagInput: event.target.value})
   }
 
-  render() {   
-    // const value = this.state.textInput   
+  render() {    
     return (
       <div className="todoarea">
         <h2>todos</h2>

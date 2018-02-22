@@ -55,3 +55,11 @@ input {
 .todo.hot {
     background: red;
 }
+
+/* Inputs */
+.todo input[type="checkbox"] {
+    -webkit-appearance: radio;
+}
+input[type="date"]::-webkit-inner-spin-button { 
+    display: none;
+}
