@@ -5,9 +5,6 @@ import './Todo.css'
 export default class TodoList extends React.Component {
   constructor(props) {
     super(props)
-    this.handleNameChange = this.handleNameChange.bind(this)
-    this.handleDateChange = this.handleDateChange.bind(this)
-    this.handleTagChange = this.handleTagChange.bind(this)
     this.addTodo = this.addTodo.bind(this)
     this.removeTodo = this.removeTodo.bind(this)
     this.handleDone = this.handleDone.bind(this)
@@ -15,17 +12,13 @@ export default class TodoList extends React.Component {
     this.compareTemps = this.compareTemps.bind(this)
     this.updateTodos = this.updateTodos.bind(this)
     this.getNextId = this.getNextId.bind(this)
+    this.addTag = this.addTag.bind(this)
 
     this.state = {
         localStore: 'timelytodos', 
         todos: [],
-        nameInput: '',
-        dateInput: '',
-        tagInput: '',
         tags: [
-          'tag 1',
-          'tag 2',
-          'tag 3'
+          'general'
         ]
     }
   }
@@ -40,7 +33,7 @@ export default class TodoList extends React.Component {
 
   getData() {
     let data = localStorage.getItem(this.state.localStore)
-    if (data !== null) {
+    if (data != null) {
       this.updateTodos(Object.values(JSON.parse(data)), false)
     }
   }
@@ -55,13 +48,14 @@ export default class TodoList extends React.Component {
   addTodo(event) {
     event.preventDefault()
     let newTodo = {
-      name: this.state.nameInput,
+      name: event.target[0].value,
       id: this.getNextId(),
-      tag: this.state.tagInput,
-      deadlineDate: new Date(this.state.dateInput),
+      tag: event.target[2].value,
+      deadlineDate: new Date(event.target[3].value),
       createdDate: new Date(),
       done: false
     }
+    this.addTag(event.target[2].value)
     let newTodos = this.state.todos
     newTodos.push(newTodo)
     this.updateTodos(newTodos)
@@ -101,6 +95,14 @@ export default class TodoList extends React.Component {
     )
   }
 
+  // Tags/Categories
+
+  addTag(newTag) {
+    if (! this.state.tags.findIndex((e)=>e===newTag)) {
+      this.setState({tags: [newTag].concat(this.state.todos)})
+    }
+  }
+
   // Helper Functions
 
   getTemperature(created) {
@@ -132,20 +134,6 @@ export default class TodoList extends React.Component {
     return next
   }
 
-  // Input changes (TODO: Get rid of)
-
-  handleNameChange(event) {
-    this.setState({nameInput: event.target.value})
-  }
-
-  handleDateChange(event) {
-    this.setState({dateInput: event.target.value})
-  }
-
-  handleTagChange(event) {
-    this.setState({tagInput: event.target.value})
-  }
-
   render() {    
     return (
       <div className="todoarea">
@@ -168,39 +156,39 @@ export default class TodoList extends React.Component {
                   onDelete={this.removeTodo}
               />
           )}
+          <form className="todo open" onSubmit={this.addTodo}>
+            <div className="top">
+              <span className="checkbox-container">
+                <span className="checkmark"></span>
+              </span>
+              <input 
+                name="name"
+                type="text" 
+              />
+              <button type="submit" value="Submit">
+                Add
+              </button>
+            </div>
+            <div className="bottom">
+              <div className="tag"> 
+                <label>Category: </label>
+                <input type="text" className="tag" list="tags" />
+                <datalist id="tags">
+                  { this.state.tags.map((tag) =>
+                    <option value={tag} key={tag} />
+                  )}
+                </datalist>
+              </div>
+              <div className="due">
+                <label>Due Date: </label>
+                <input 
+                  name="duedate"
+                  type="date" 
+                />
+              </div>
+            </div>
+          </form>
         </div>
-        <h2>add todo</h2>
-        <div>Value: {this.state.nameInput}</div>
-        <form onSubmit={this.addTodo}>
-          <label>
-            Name
-            <input 
-              name="name"
-              type="text" 
-              value={this.state.nameInput} 
-              onChange={this.handleNameChange} 
-            />
-          </label>
-          <label>
-            Due Date
-            <input 
-              name="duedate"
-              type="date" 
-              value={this.state.dateInput} 
-              onChange={this.handleDateChange}
-            />
-          </label>
-          <label>
-            Tag
-            <input 
-              name="tag"
-              type="text" 
-              value={this.state.tagInput} 
-              onChange={this.handleTagChange} 
-            />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
       </div>
     )
   }

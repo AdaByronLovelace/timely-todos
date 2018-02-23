@@ -27,35 +27,48 @@
   background: red;
 }
 
+div.todo.done {
+  background: gray;
+}
+
 input[type="date"]::-webkit-inner-spin-button { 
   display: none;
 }
 
 div.todo {
+  border-bottom: gray 1px solid;
   padding-top: 10px;
-  border-bottom: darkgray 2px solid;
 }
 
-div.text.done {
+div.done .top {
   text-decoration: line-through;
 }
 
-div.text.open {
+div.open .top {
   text-decoration: none
 }
 
-div.text {
-  display: block;
-  position: relative;
-  padding-left: 45px;
-  margin-bottom: 12px;
+div.top {
+  display: flex;
+  flex-direction: row;
   font-size: 22px;
-  /* user-select: none; */
   border: none;
-	text-align: left;
+  text-align: left;
+  padding: 0 10px 5px 0;
+  justify-content: space-between;
 }
 
-div.text input[type="checkbox"] {
+.checkbox-container {
+  position: relative;
+  margin: 0 45px 0 0;
+}
+
+.delete-container {
+  position: relative;
+  margin: 0;
+}
+
+div.top input[type="checkbox"] {
   position: absolute;
   opacity: 0;
   cursor: pointer;
@@ -72,14 +85,18 @@ div.text input[type="checkbox"] {
   background-color: #eee;
 }
 
-div.text .checkmark::hover {
+div.top .checkmark::hover {
   background-color: #ccc;
+}
+
+div.top .text {
+  text-align: left;
+  width: 100%;
 }
 
 .bottom {
   display:flex;
   flex-direction: row;
-  /* background: rgba(200,200,200,.2); */
   padding: 5px 10px;
   justify-content: space-between;
 }
@@ -87,7 +104,7 @@ div.text .checkmark::hover {
   font-size: 80%;
 }
 
-div.text.done .checkmark {
+.done div.top .checkmark {
   background-color: darkgray;
 }
 
@@ -97,11 +114,11 @@ div.text.done .checkmark {
   display: none;
 }
 
-div.text.done .checkmark::after {
+.done div.top .checkmark::after {
   display: block;
 }
 
-div.text .checkmark::after {
+div.top .checkmark::after {
   left: 9px;
   top: 5px;
   width: 5px;
@@ -116,7 +133,7 @@ div.text .checkmark::after {
 .delete {
   position: absolute;
   top: 0;
-  right: 10px;
+  right: 0;
   height: 25px;
   width: 25px;
   background-color: #ccc;
@@ -132,7 +149,7 @@ div.text .checkmark::after {
   position: absolute;
 }
 
-div.text .delete::before {
+div.top .delete::before {
   left: 14px;
 	top: 8px;
 	width: 15px;
@@ -144,7 +161,7 @@ div.text .delete::before {
 	transform: rotate(135deg);
 }
 
-div.text .delete::after {
+div.top .delete::after {
 	left: 13px;
 	top: -7px;
 	width: 15px;
@@ -154,4 +171,29 @@ div.text .delete::after {
 	-webkit-transform: rotate(45deg);
 	-ms-transform: rotate(45deg);
 	transform: rotate(45deg);
+}
+
+form .top input {
+  margin: 5px 0 0 0;
+  height: 30px;
+  width: calc(100% - 100px);
+  font-size: 22px;
+}
+
+form .top .checkmark {
+  margin-top: 10px;
+}
+
+form .top button {
+  margin: 5px 0 0 10px;
+	height: 36px;
+	background: lightgray;
+	font-size: 16px;
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+  background-color: lightgray;
+}
+div.tag select {
+  -webkit-appearance: menulist-button;
 }

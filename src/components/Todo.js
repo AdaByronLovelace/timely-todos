@@ -31,18 +31,22 @@ export default class Todo extends React.Component {
 
   render() {
     return (
-      <div className={`todo ${this.tempClass(this.props.temp)}`}>
-        <div className={`text ${this.props.done ? 'done' : 'open'}`}>
-          <span className="checkbox-container" 
+      <div className={`todo ${this.tempClass(this.props.temp)} ${this.props.done ? 'done' : 'open'}`}>
+        <div className="top">
+          <div className="checkbox-container" 
             onClick={this.handleDone}>
             <input type="checkbox" />
             <span className="checkmark"></span>
-          </span>
-          { this.props.name }
-          <span 
-            onClick={this.handleDelete}
-            className="delete">
-          </span>
+          </div>
+          <div className="text">
+            { this.props.name }
+          </div>
+          <div className="delete-container">
+            <div 
+              onClick={this.handleDelete}
+              className="delete">
+            </div>
+          </div>
         </div>
         <div className="bottom">
           <div className="tag">{ this.props.tag }</div>
