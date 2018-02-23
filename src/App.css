@@ -1,26 +1,17 @@
 body {
   font-family: 'Walter Turncoat', cursive;
-}
-.App {
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: lightgray;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
 .App-title {
-  font-size: 1.5em;
+  padding: 10px;
+	margin: 0;
+	font-size: 40px;
+  display: inline-block;
+  color: white;
+  background: linear-gradient(to right, red, orange , yellow, limegreen, cyan, violet);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.App-intro {
-  font-size: large;
-}

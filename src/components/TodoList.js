@@ -15,6 +15,7 @@ export default class TodoList extends React.Component {
     this.getNextId = this.getNextId.bind(this)
     this.addTag = this.addTag.bind(this)
     this.changeFilter = this.changeFilter.bind(this)
+    this.sortTags = this.sortTags.bind(this)
 
     this.state = {
         localTodos: 'timelytodos', 
@@ -42,7 +43,7 @@ export default class TodoList extends React.Component {
     if (tags != null) {
       this.updateTags(JSON.parse(tags))
     } else {
-      this.updateTags(['all'])
+      this.updateTags(['all', 'done'])
     }
   }
 
@@ -72,6 +73,7 @@ export default class TodoList extends React.Component {
     this.addTag(event.target[2].value)
     let newTodos = this.state.todos
     newTodos.push(newTodo)
+    event.target.reset()
     this.updateTodos(newTodos)
   }
 
@@ -110,9 +112,10 @@ export default class TodoList extends React.Component {
   }
 
   updateTags(newTags) {
-    this.setState({tags: newTags}, () =>
+    this.setState({tags: newTags}, () => {
       this.setData('tags')
-    )
+      this.sortTags()
+    })
   }
 
   // Tags/Categories
@@ -126,6 +129,13 @@ export default class TodoList extends React.Component {
 
   changeFilter(event) {
     this.setState({filter: event.target.innerText})
+  }
+
+  sortTags() {
+    let tags = this.state.tags.filter(tag => tag !== 'all' && tag !== 'done')
+    let first = ['all', 'done']
+    tags = first.concat(tags)
+    this.setState({tags: tags})
   }
 
   // Helper Functions
@@ -176,7 +186,7 @@ export default class TodoList extends React.Component {
           </div>
           <div className="todo-list">
             { [].concat(this.state.todos)
-              .filter(item => item.tag === this.state.filter || 'all' === this.state.filter )
+              .filter(item => item.tag === this.state.filter || ('all' === this.state.filter && !item.done) || ('done' === this.state.filter && item.done))
               .sort(this.compareTemps)
               .map(item =>
                 <Todo 
@@ -208,7 +218,7 @@ export default class TodoList extends React.Component {
                   <input type="text" className="tag" list="tags" />
                   <datalist id="tags">
                     { this.state.tags.map(tag => 
-                      (tag !== 'all' ? <option value={tag} key={tag} /> : '')
+                      ((tag !== 'all' && tag !== 'done') ? <option value={tag} key={tag} /> : '')
                     )}
                   </datalist>
                 </div>

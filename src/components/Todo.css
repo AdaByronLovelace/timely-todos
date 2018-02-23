@@ -15,7 +15,7 @@
 
 /* Temperature */
 .todo.cold {
-  background: #FFFAAA;
+  background: #dfff80;
 }
 .todo.cool {
   background: #FFF665;
@@ -114,9 +114,28 @@ div.top .text {
   font-size: 80%;
 }
 
+.bottom .tag {
+  background: rgba(255,255,255,.6);
+  padding: 2px 5px;
+}
+
 .done div.top .checkmark {
   background-color: rgba(255,255,255,.3);
   cursor: pointer;
+}
+
+form.todo .bottom label {
+  background: white;
+  padding: 0 5px;
+}
+
+form.todo .bottom .tag {
+  background: white;
+}
+
+form.todo .bottom input[type="date"]{
+  height: 20px;
+  border-top: white solid 1px;
 }
 
 .checkmark::after {
@@ -217,6 +236,7 @@ div.tag-filters {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 form.todo .bottom {
@@ -242,6 +262,42 @@ div.tag-filters .filter {
   cursor: pointer;
 }
 
+form .bottom .due {
+  background: white;
+}
+
+div.tag-filters .filter:nth-child(1) {
+  background: #99ffb3;
+}
+
+div.tag-filters .filter:nth-child(2) {
+  background: #99ffe6;
+}
+
+div.tag-filters .filter:nth-child(3) {
+  background: #99ffff;
+}
+
+div.tag-filters .filter:nth-child(4) {
+  background: #99e6ff;
+}
+
+div.tag-filters .filter:nth-child(5) {
+  background: #99ccff;
+}
+
+div.tag-filters .filter:nth-child(6) {
+  background: #99b3ff;
+}
+
+div.tag-filters .filter:nth-child(7) {
+  background: #9999ff;
+}
+
+div.tag-filters .filter:nth-child(8) {
+  background: #b399ff
+}
+
 div.tag-filters .filter.selected {
-  background: #333333;
+  background: #808080;
 }
