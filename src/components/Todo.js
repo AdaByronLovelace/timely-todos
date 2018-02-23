@@ -9,10 +9,13 @@ export default class Todo extends React.Component {
   }
 
   tempClass(temp) {
-    if (temp < 2) return 'hot'
-    else if (temp < 4) return 'warm'
-    else if (temp < 7) return 'tepid'
-    else if (temp < 14) return 'cool'
+    if (temp < 2) return 'hottest'
+    else if (temp < 4) return 'hotter'
+    else if (temp < 6) return 'hot'
+    else if (temp < 10) return 'warmer'
+    else if (temp < 14) return 'warm'
+    else if (temp < 30) return 'tepid'
+    else if (temp < 45) return 'cool'
     else return 'cold'
   }
 

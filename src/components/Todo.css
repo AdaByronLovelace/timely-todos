@@ -1,7 +1,11 @@
+/* dark gray for text and icons #333333
+
 /* Todo */
 .todo-area {
   position: relative;
+  color: #333333;
 }
+
 .todo-content {
   display: flex;
   flex-direction: column;
@@ -9,26 +13,34 @@
   max-width: 900px;
 }
 
-
 /* Temperature */
 .todo.cold {
-  background: white;
+  background: #FFFAAA;
 }
 .todo.cool {
-  background: lightyellow;
+  background: #FFF665;
 }
 .todo.tepid {
-  background: yellow;
+  background: #FFD260;
 }
 .todo.warm {
-  background: orange;
+  background: #FFB85C;
+}
+.todo.warmer {
+  background: #FF9D58;
 }
 .todo.hot {
-  background: red;
+  background: #FF8254;
+}
+.todo.hotter {
+  background: #FF6851;
+}
+.todo.hottest {
+  background: #ff4d4d;
 }
 
 div.todo.done {
-  background: gray;
+  background: #dcdcbe;
 }
 
 input[type="date"]::-webkit-inner-spin-button { 
@@ -74,17 +86,17 @@ div.top input[type="checkbox"] {
 	top: 4px;
 }
 
-.checkmark {
+div.top .checkmark {
   position: absolute;
   top: 0;
   left: 10px;
   height: 25px;
   width: 25px;
-  background-color: #eee;
+  background-color: rgba(255,255,255,.3);
 }
 
-div.top .checkmark::hover {
-  background-color: #ccc;
+div.top .checkmark:hover, .done div.top .checkmark:hover {
+  background-color: rgba(255,255,255,.6);
 }
 
 div.top .text {
@@ -103,7 +115,8 @@ div.top .text {
 }
 
 .done div.top .checkmark {
-  background-color: darkgray;
+  background-color: rgba(255,255,255,.3);
+  cursor: pointer;
 }
 
 .checkmark::after {
@@ -121,7 +134,7 @@ div.top .checkmark::after {
   top: 5px;
   width: 5px;
   height: 10px;
-  border: solid white;
+  border: solid #333333;
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
@@ -134,12 +147,12 @@ div.top .checkmark::after {
   right: 0;
   height: 25px;
   width: 25px;
-  background-color: #ccc;
+  background-color: rgba(255,255,255,.3);
   cursor: pointer;
 }
 
-.delete::hover {
-  background-color: darkgray;
+.delete:hover {
+  background-color: rgba(255,255,255,.6);
 }
 
 .delete::after, .delete::before {
@@ -152,7 +165,7 @@ div.top .delete::before {
 	top: 8px;
 	width: 15px;
 	height: 24px;
-	border: solid white;
+	border: solid #333333;
 	border-width: 0 0 3px 0;
 	-webkit-transform: rotate(135deg);
 	-ms-transform: rotate(135deg);
@@ -164,40 +177,55 @@ div.top .delete::after {
 	top: -7px;
 	width: 15px;
 	height: 22px;
-	border: solid white;
+	border: solid #333333;
 	border-width: 0 0 3px 0;
 	-webkit-transform: rotate(45deg);
 	-ms-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
 
-form .top input {
-  margin: 5px 0 0 0;
-  height: 30px;
-  width: calc(100% - 100px);
-  font-size: 22px;
+form.todo {
+  background:#ededde;
 }
 
-form .top .checkmark {
-  margin-top: 10px;
+form .top input {
+  margin: 10px 0 0 10px;
+  height: 38px;
+  width: calc(100% - 60px);
+  font-size: 22px;
+  border: none;
 }
 
 form .top button {
-  margin: 5px 0 0 10px;
-	height: 36px;
-	background: lightgray;
-	font-size: 16px;
+  margin: 10px 0 0 10px;
+	background: rgba(200,200,200,.4);
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  height: 40px;
+  cursor: pointer;
+  font-family: 'Walter Turncoat', cursive;
 }
 
-input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
-  background-color: lightgray;
+form .top button:hover {
+  background: rgba(255,255,255,.8);
 }
 
 /* Filter by tag */
+
 div.tag-filters {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+}
+
+form.todo .bottom {
+  padding-bottom: 10px;
+}
+
+form.todo .bottom input, form.todo .bottom datalist {
+  border: none;
+  cursor: pointer;
 }
 
 div.tag-filters .label {
@@ -215,5 +243,5 @@ div.tag-filters .filter {
 }
 
 div.tag-filters .filter.selected {
-  background: black;
+  background: #333333;
 }

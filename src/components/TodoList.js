@@ -194,15 +194,12 @@ export default class TodoList extends React.Component {
             )}
             <form className="todo open" onSubmit={this.addTodo}>
               <div className="top">
-                <span className="checkbox-container">
-                  <span className="checkmark"></span>
-                </span>
                 <input 
                   name="name"
                   type="text" 
                 />
                 <button type="submit" value="Submit">
-                  Add
+                  ADD
                 </button>
               </div>
               <div className="bottom">
