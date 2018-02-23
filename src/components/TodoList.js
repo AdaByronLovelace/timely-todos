@@ -11,15 +11,17 @@ export default class TodoList extends React.Component {
     this.getTemperature = this.getTemperature.bind(this)
     this.compareTemps = this.compareTemps.bind(this)
     this.updateTodos = this.updateTodos.bind(this)
+    this.updateTags = this.updateTags.bind(this)
     this.getNextId = this.getNextId.bind(this)
     this.addTag = this.addTag.bind(this)
+    this.changeFilter = this.changeFilter.bind(this)
 
     this.state = {
-        localStore: 'timelytodos', 
+        localTodos: 'timelytodos', 
+        localTags: 'timelytags',
         todos: [],
-        tags: [
-          'general'
-        ]
+        tags: [],
+        filter: 'all'
     }
   }
 
@@ -32,15 +34,27 @@ export default class TodoList extends React.Component {
   // Local Storage 
 
   getData() {
-    let data = localStorage.getItem(this.state.localStore)
-    if (data != null) {
-      this.updateTodos(Object.values(JSON.parse(data)), false)
+    let todos = localStorage.getItem(this.state.localTodos)
+    if (todos != null) {
+      this.updateTodos(Object.values(JSON.parse(todos)))
+    }
+    let tags = localStorage.getItem(this.state.localTags)
+    if (tags != null) {
+      this.updateTags(JSON.parse(tags))
+    } else {
+      this.updateTags(['all'])
     }
   }
 
-  setData() {
-    let dataStr = JSON.stringify(this.state.todos) 
-    localStorage.setItem(this.state.localStore, dataStr)
+  setData(type) {
+    let dataStr = ''
+    if (type === 'todos') {
+      dataStr = JSON.stringify(this.state.todos) 
+      localStorage.setItem(this.state.localTodos, dataStr)
+    } else if (type === 'tags') {
+      dataStr = JSON.stringify(this.state.tags) 
+      localStorage.setItem(this.state.localTags, dataStr)
+    }
   }
 
   // Todos Add, Change, Delete
@@ -89,18 +103,29 @@ export default class TodoList extends React.Component {
     this.updateTodos(newTodos)
   }
 
-  updateTodos(newTodos, set) {
+  updateTodos(newTodos) {
     this.setState({todos: newTodos}, () =>
-      this.setData()
+      this.setData('todos')
+    )
+  }
+
+  updateTags(newTags) {
+    this.setState({tags: newTags}, () =>
+      this.setData('tags')
     )
   }
 
   // Tags/Categories
 
   addTag(newTag) {
-    if (! this.state.tags.findIndex((e)=>e===newTag)) {
-      this.setState({tags: [newTag].concat(this.state.todos)})
+    let index = this.state.tags.findIndex((e) => e===newTag)
+    if (index < 0) {
+      this.updateTags([newTag].concat(this.state.tags))
     }
+  }
+
+  changeFilter(event) {
+    this.setState({filter: event.target.innerText})
   }
 
   // Helper Functions
@@ -136,58 +161,70 @@ export default class TodoList extends React.Component {
 
   render() {    
     return (
-      <div className="todoarea">
-        <h2>todos</h2>
-        <div> Num todos: {this.state.todos.length} </div>
-        <div className="todolist">
-          { [].concat(this.state.todos)
-            .sort(this.compareTemps)
-            .map(item =>
-              <Todo 
-                  key={item.id} 
-                  id={item.id}
-                  name={item.name} 
-                  tag={item.tag}
-                  deadlineDate={item.deadlineDate.toString()}
-                  createdDate={item.createdDate.toString()}
-                  done={item.done}
-                  temp={this.getTemperature(item.deadlineDate)}
-                  onDone={this.handleDone}
-                  onDelete={this.removeTodo}
-              />
-          )}
-          <form className="todo open" onSubmit={this.addTodo}>
-            <div className="top">
-              <span className="checkbox-container">
-                <span className="checkmark"></span>
-              </span>
-              <input 
-                name="name"
-                type="text" 
-              />
-              <button type="submit" value="Submit">
-                Add
-              </button>
-            </div>
-            <div className="bottom">
-              <div className="tag"> 
-                <label>Category: </label>
-                <input type="text" className="tag" list="tags" />
-                <datalist id="tags">
-                  { this.state.tags.map((tag) =>
-                    <option value={tag} key={tag} />
-                  )}
-                </datalist>
+      <div className="todo-area">
+        <div className="todo-content">
+          <div className="tag-filters">
+            <div className="label">Category</div>
+            { this.state.tags.map((tag) =>
+              <div 
+                className={`filter ${tag === this.state.filter ? 'selected' : ''}`}
+                onClick={this.changeFilter}
+                key={tag}>
+                  {tag}
               </div>
-              <div className="due">
-                <label>Due Date: </label>
-                <input 
-                  name="duedate"
-                  type="date" 
+            )}
+          </div>
+          <div className="todo-list">
+            { [].concat(this.state.todos)
+              .filter(item => item.tag === this.state.filter || 'all' === this.state.filter )
+              .sort(this.compareTemps)
+              .map(item =>
+                <Todo 
+                    key={item.id} 
+                    id={item.id}
+                    name={item.name} 
+                    tag={item.tag}
+                    deadlineDate={item.deadlineDate.toString()}
+                    createdDate={item.createdDate.toString()}
+                    done={item.done}
+                    temp={this.getTemperature(item.deadlineDate)}
+                    onDone={this.handleDone}
+                    onDelete={this.removeTodo}
                 />
+            )}
+            <form className="todo open" onSubmit={this.addTodo}>
+              <div className="top">
+                <span className="checkbox-container">
+                  <span className="checkmark"></span>
+                </span>
+                <input 
+                  name="name"
+                  type="text" 
+                />
+                <button type="submit" value="Submit">
+                  Add
+                </button>
               </div>
-            </div>
-          </form>
+              <div className="bottom">
+                <div className="tag"> 
+                  <label>Category: </label>
+                  <input type="text" className="tag" list="tags" />
+                  <datalist id="tags">
+                    { this.state.tags.map(tag => 
+                      (tag !== 'all' ? <option value={tag} key={tag} /> : '')
+                    )}
+                  </datalist>
+                </div>
+                <div className="due">
+                  <label>Due Date: </label>
+                  <input 
+                    name="duedate"
+                    type="date" 
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     )

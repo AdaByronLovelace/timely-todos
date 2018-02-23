@@ -1,8 +1,8 @@
 /* Todo */
-.todoarea {
+.todo-area {
   position: relative;
 }
-.todolist {
+.todo-content {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -36,7 +36,6 @@ input[type="date"]::-webkit-inner-spin-button {
 }
 
 div.todo {
-  border-bottom: gray 1px solid;
   padding-top: 10px;
 }
 
@@ -52,7 +51,6 @@ div.top {
   display: flex;
   flex-direction: row;
   font-size: 22px;
-  border: none;
   text-align: left;
   padding: 0 10px 5px 0;
   justify-content: space-between;
@@ -194,6 +192,24 @@ form .top button {
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
   background-color: lightgray;
 }
-div.tag select {
-  -webkit-appearance: menulist-button;
+
+/* Filter by tag */
+div.tag-filters {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+div.tag-filters .label {
+  padding: 5px;
+  margin: 5px;
+}
+
+div.tag-filters .filter {
+  color: white;
+  background: gray;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
 }
