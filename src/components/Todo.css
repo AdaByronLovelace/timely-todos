@@ -213,3 +213,7 @@ div.tag-filters .filter {
   margin: 5px;
   cursor: pointer;
 }
+
+div.tag-filters .filter.selected {
+  background: black;
+}

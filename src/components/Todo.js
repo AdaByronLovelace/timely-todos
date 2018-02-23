@@ -50,9 +50,7 @@ export default class Todo extends React.Component {
         </div>
         <div className="bottom">
           <div className="tag">{ this.props.tag }</div>
-          <div>TEMP {this.props.temp}</div>
           <div className="due">Due on { this.getDate(this.props.deadlineDate) }</div>
-          <div>Created on { this.getDate(this.props.createdDate) }</div>
         </div>
       </div>
     )
