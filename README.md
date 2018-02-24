@@ -8,7 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Live Example
 
-(https://adabyronlovelace.github.io/timely-todos/)
+[Timely Todos](https://adabyronlovelace.github.io/timely-todos/)
 
 # TO DO
 
