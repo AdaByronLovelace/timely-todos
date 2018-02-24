@@ -1,10 +1,14 @@
-#Timely To Dos
+# Timely To Dos
 
 By Emily Smith
 
-The app is a way for me to learn React and try out some features. 
+A todo app using local storage, that will prioritze and color todos based on their due date. 
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+
+## Live Example
+
+(https://adabyronlovelace.github.io/timely-todos/)
 
 # TO DO
 
