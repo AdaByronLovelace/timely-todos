@@ -38,6 +38,9 @@
 .todo.hottest {
   background: #ff4d4d;
 }
+.todo.ablaze {
+  background: #cf3f3f;
+}
 
 div.todo.done {
   background: #dcdcbe;

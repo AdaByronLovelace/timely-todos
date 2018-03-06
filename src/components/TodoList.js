@@ -18,11 +18,11 @@ export default class TodoList extends React.Component {
     this.sortTags = this.sortTags.bind(this)
 
     this.state = {
-        localTodos: 'timelytodos', 
-        localTags: 'timelytags',
-        todos: [],
-        tags: [],
-        filter: 'all'
+      localTodos: 'timelytodos', 
+      localTags: 'timelytags',
+      todos: [],
+      tags: [],
+      filter: 'all'
     }
   }
 
@@ -62,15 +62,20 @@ export default class TodoList extends React.Component {
 
   addTodo(event) {
     event.preventDefault()
+    let due = event.target[3].value
+    due = due.length === 0 ? new Date() : new Date(due)
+    due.setHours(23,59,59,0)
+    let category = event.target[2].value
+    category = category.length === 0 ? 'general' : category
     let newTodo = {
       name: event.target[0].value,
       id: this.getNextId(),
-      tag: event.target[2].value,
-      deadlineDate: new Date(event.target[3].value),
+      tag: category,
+      deadlineDate: due,
       createdDate: new Date(),
       done: false
     }
-    this.addTag(event.target[2].value)
+    this.addTag(category)
     let newTodos = this.state.todos
     newTodos.push(newTodo)
     event.target.reset()
@@ -140,11 +145,11 @@ export default class TodoList extends React.Component {
 
   // Helper Functions
 
-  getTemperature(created) {
-    const now = new Date()
-    const create = new Date(created)
-    let timeDiff = Math.abs(now.getTime() - create.getTime());
-    return Math.floor(timeDiff / (1000 * 3600 * 24));
+  getTemperature(dueStr) {
+    const nowDate = new Date()
+    const dueDate = new Date(dueStr)
+    let timeDiff = dueDate.getTime() - nowDate.getTime()
+    return Math.floor(timeDiff / (1000 * 3600 * 24))
   }
 
   compareTemps(a,b) {
@@ -225,7 +230,7 @@ export default class TodoList extends React.Component {
                 <div className="due">
                   <label>Due Date: </label>
                   <input 
-                    name="duedate"
+                    id="duedate"
                     type="date" 
                   />
                 </div>
