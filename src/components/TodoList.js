@@ -8,7 +8,6 @@ export default class TodoList extends React.Component {
     this.addTodo = this.addTodo.bind(this)
     this.removeTodo = this.removeTodo.bind(this)
     this.handleDone = this.handleDone.bind(this)
-    this.getTemperature = this.getTemperature.bind(this)
     this.compareTemps = this.compareTemps.bind(this)
     this.updateTodos = this.updateTodos.bind(this)
     this.updateTags = this.updateTags.bind(this)
@@ -16,10 +15,10 @@ export default class TodoList extends React.Component {
     this.addTag = this.addTag.bind(this)
     this.changeFilter = this.changeFilter.bind(this)
     this.sortTags = this.sortTags.bind(this)
+    this.resetTodos = this.resetTodos.bind(this)
 
     this.state = {
-      localTodos: 'timelytodos', 
-      localTags: 'timelytags',
+      localTodos: 'timelytodos',
       todos: [],
       tags: [],
       filter: 'all'
@@ -35,13 +34,15 @@ export default class TodoList extends React.Component {
   // Local Storage 
 
   getData() {
-    let todos = localStorage.getItem(this.state.localTodos)
+    const todos = localStorage.getItem(this.state.localTodos)
+    const todosObj = Object.values(JSON.parse(todos))
+    let tags
     if (todos != null) {
-      this.updateTodos(Object.values(JSON.parse(todos)))
+      this.updateTodos(todosObj)
+      tags = this.getTags(todosObj)
     }
-    let tags = localStorage.getItem(this.state.localTags)
     if (tags != null) {
-      this.updateTags(JSON.parse(tags))
+      this.updateTags(tags)
     } else {
       this.updateTags(['all', 'done'])
     }
@@ -56,6 +57,10 @@ export default class TodoList extends React.Component {
       dataStr = JSON.stringify(this.state.tags) 
       localStorage.setItem(this.state.localTags, dataStr)
     }
+  }
+
+  clearData() {
+    localStorage.clear()
   }
 
   // Todos Add, Change, Delete
@@ -87,6 +92,12 @@ export default class TodoList extends React.Component {
       return todo.id !== id
     })
     this.updateTodos(newTodos)
+  }
+
+  resetTodos() {
+    this.setState({todos: [], tags: []}, () =>
+      this.getData()
+    )
   }
 
   handleDone(id) {
@@ -142,6 +153,14 @@ export default class TodoList extends React.Component {
     tags = first.concat(tags)
     this.setState({tags: tags})
   }
+  
+  getTags(todos) {
+    let tags = new Set(['all', 'done'])
+    todos.forEach(todo => {
+      tags.add(todo.tag)
+    })
+    return Array.from(tags)
+  }
 
   // Helper Functions
 
@@ -164,7 +183,7 @@ export default class TodoList extends React.Component {
     else if (a.done) return 1
     else return -1
   }
-
+  
   getNextId() {
     var next = 0
     // eslint-disable-next-line 
@@ -178,6 +197,11 @@ export default class TodoList extends React.Component {
     return (
       <div className="todo-area">
         <div className="todo-content">
+          <div className="todo-control">
+            <label>Testing Controls:</label>
+            <button onClick={this.resetTodos}>Reset from Memory</button>
+            <button onClick={this.clearStorage}>Clear Memory</button>
+          </div>
           <div className="tag-filters">
             <div className="label">Category</div>
             { this.state.tags.map((tag) =>
