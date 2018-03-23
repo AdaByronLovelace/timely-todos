@@ -16,6 +16,8 @@ export default class TodoList extends React.Component {
     this.changeFilter = this.changeFilter.bind(this)
     this.sortTags = this.sortTags.bind(this)
     this.resetTodos = this.resetTodos.bind(this)
+    this.clearData = this.clearData.bind(this)
+    this.copyData = this.copyData.bind(this)
 
     this.state = {
       localTodos: 'timelytodos',
@@ -35,12 +37,12 @@ export default class TodoList extends React.Component {
 
   getData() {
     const todos = localStorage.getItem(this.state.localTodos)
-    const todosObj = Object.values(JSON.parse(todos))
-    let tags
+    let tags = null
     if (todos != null) {
-      this.updateTodos(todosObj)
+      let todosObj = Object.values(JSON.parse(todos))
       tags = this.getTags(todosObj)
-    }
+      this.updateTodos(todosObj)
+    } 
     if (tags != null) {
       this.updateTags(tags)
     } else {
@@ -61,6 +63,12 @@ export default class TodoList extends React.Component {
 
   clearData() {
     localStorage.clear()
+    this.resetTodos()
+  }
+
+  copyData() {
+    const todos = JSON.stringify(JSON.parse(localStorage.getItem(this.state.localTodos)))
+    alert(todos)
   }
 
   // Todos Add, Change, Delete
@@ -200,7 +208,8 @@ export default class TodoList extends React.Component {
           <div className="todo-control">
             <label>Testing Controls:</label>
             <button onClick={this.resetTodos}>Reset from Memory</button>
-            <button onClick={this.clearStorage}>Clear Memory</button>
+            <button onClick={this.clearData}>Clear Memory</button>
+            <button onClick={this.copyData}>Copy Data</button>
           </div>
           <div className="tag-filters">
             <div className="label">Category</div>
