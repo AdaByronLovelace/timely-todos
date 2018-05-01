@@ -63,7 +63,7 @@ export default class Todo extends React.Component {
 Todo.defaultProps = {
   tag: '',
   createdDate: new Date(),
-  deadlineDate: (new Date().getMonth()+1)%12 + 1,
+  deadlineDate: new Date(),
   name: '',
   done: false,
   temp: 0
@@ -75,5 +75,7 @@ Todo.propTypes = {
   deadlineDate: PropTypes.instanceOf(Date),
   name: PropTypes.string,
   done: PropTypes.bool,
-  temp: PropTypes.number
+  temp: PropTypes.number,
+  onDone: PropTypes.func,
+  onDelete: PropTypes.func
 }
