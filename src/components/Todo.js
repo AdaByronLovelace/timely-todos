@@ -28,9 +28,8 @@ export default class Todo extends React.Component {
     this.props.onDone(this.props.id)
   }
 
-  getDate(date) {
-    let dateObj = new Date(date)
-    return dateObj.toLocaleDateString("en-US")
+  dateToString(date) {
+    return new Date(date).toLocaleDateString("en-US")
   }
 
   render() {
@@ -54,7 +53,7 @@ export default class Todo extends React.Component {
         </div>
         <div className="bottom">
           <div className="tag">{ this.props.tag }</div>
-          <div className="due">Due on { this.getDate(this.props.deadlineDate) }</div>
+          <div className="due">Due on { this.dateToString(this.props.deadlineDate) }</div>
         </div>
       </div>
     )
@@ -63,8 +62,8 @@ export default class Todo extends React.Component {
 
 Todo.defaultProps = {
   tag: '',
-  createdDate: (new Date()).toString(),
-  deadlineDate: ((new Date().getMonth()+1)%12 + 1).toString(),
+  createdDate: new Date(),
+  deadlineDate: (new Date().getMonth()+1)%12 + 1,
   name: '',
   done: false,
   temp: 0
@@ -72,8 +71,8 @@ Todo.defaultProps = {
 
 Todo.propTypes = {
   tag: PropTypes.string,
-  createdDate: PropTypes.string,
-  deadlineDate: PropTypes.string,
+  createdDate: PropTypes.instanceOf(Date),
+  deadlineDate: PropTypes.instanceOf(Date),
   name: PropTypes.string,
   done: PropTypes.bool,
   temp: PropTypes.number
