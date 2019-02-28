@@ -4,8 +4,15 @@ import PropTypes from 'prop-types'
 export default class Todo extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      textEdit: false,
+      dateEdit: false,
+      tagEdit: false
+    }
     this.handleDelete = this.handleDelete.bind(this)
     this.handleDone = this.handleDone.bind(this)
+    this.onBlurText = this.onBlurText.bind(this)
+    this.onClickText = this.onClickText.bind(this)
   }
 
   tempClass(temp) {
@@ -32,6 +39,16 @@ export default class Todo extends React.Component {
     return new Date(date).toLocaleDateString("en-US")
   }
 
+  onClickText() {
+    this.setState({textEdit: true})
+  }
+
+  onBlurText() {
+    this.setState({textEdit: false},
+      this.props.onEditText(this.props.id)
+    )
+  }
+
   render() {
     return (
       <div className={`todo ${this.tempClass(this.props.temp)} ${this.props.done ? 'done' : 'open'}`}>
@@ -41,8 +58,16 @@ export default class Todo extends React.Component {
             <input type="checkbox" />
             <span className="checkmark"></span>
           </div>
-          <div className="text">
-            { this.props.name }
+          <div className="text" 
+            onClick={this.onClickText}
+            onBlur={this.onBlurText}>
+            { this.state.textEdit ? 
+            <input 
+              name="name"
+              type="text"
+              className="text-input"
+              value={this.props.name}/>
+            : this.props.name }
           </div>
           <div className="delete-container">
             <div 
@@ -66,16 +91,19 @@ Todo.defaultProps = {
   deadlineDate: new Date(),
   name: '',
   done: false,
-  temp: 0
+  temp: 0,
+  id: -1
 }
 
 Todo.propTypes = {
   tag: PropTypes.string,
   createdDate: PropTypes.instanceOf(Date),
   deadlineDate: PropTypes.instanceOf(Date),
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
   done: PropTypes.bool,
   temp: PropTypes.number,
   onDone: PropTypes.func,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
+  onEditText: PropTypes.func,
+  id: PropTypes.number
 }

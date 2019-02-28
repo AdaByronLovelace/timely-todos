@@ -1,5 +1,6 @@
 import React from 'react'
 import Todo from './Todo'
+import EditText from './EditText'
 import './Todo.css'
 
 export default class TodoList extends React.Component {
@@ -18,6 +19,7 @@ export default class TodoList extends React.Component {
     this.resetTodos = this.resetTodos.bind(this)
     this.clearData = this.clearData.bind(this)
     this.copyData = this.copyData.bind(this)
+    this.todoForm = this.todoForm.bind(this)
 
     this.state = {
       localTodos: 'timelytodos',
@@ -170,6 +172,11 @@ export default class TodoList extends React.Component {
     return Array.from(tags)
   }
 
+  // In place editting 
+  editText(id) {
+    alert(id)
+  }
+
   // Helper Functions
 
   getTemperature(dueStr) {
@@ -199,6 +206,41 @@ export default class TodoList extends React.Component {
       next = Math.floor(Math.random()*10000)
     }
     return next
+  }
+
+  todoForm() {
+    return(
+      <form className="todo open" onSubmit={this.addTodo}>
+        <div className="top">
+          <input 
+            name="name"
+            type="text"
+            className="text-input"
+          />
+          <button type="submit" value="Submit">
+            ADD
+          </button>
+        </div>
+        <div className="bottom">
+          <div className="tag"> 
+            <label>Category: </label>
+            <input type="text" className="tag" list="tags" />
+            <datalist id="tags">
+              { this.state.tags.map(tag => 
+                ((tag !== 'all' && tag !== 'done') ? <option value={tag} key={tag} /> : '')
+              )}
+            </datalist>
+          </div>
+          <div className="due">
+            <label>Due Date: </label>
+            <input 
+              id="duedate"
+              type="date" 
+            />
+          </div>
+        </div>
+      </form>
+    )
   }
 
   render() {    
@@ -238,38 +280,13 @@ export default class TodoList extends React.Component {
                     temp={this.getTemperature(item.deadlineDate)}
                     onDone={this.handleDone}
                     onDelete={this.removeTodo}
+                    onEditText={this.editText}
                 />
             )}
-            <form className="todo open" onSubmit={this.addTodo}>
-              <div className="top">
-                <input 
-                  name="name"
-                  type="text" 
-                />
-                <button type="submit" value="Submit">
-                  ADD
-                </button>
-              </div>
-              <div className="bottom">
-                <div className="tag"> 
-                  <label>Category: </label>
-                  <input type="text" className="tag" list="tags" />
-                  <datalist id="tags">
-                    { this.state.tags.map(tag => 
-                      ((tag !== 'all' && tag !== 'done') ? <option value={tag} key={tag} /> : '')
-                    )}
-                  </datalist>
-                </div>
-                <div className="due">
-                  <label>Due Date: </label>
-                  <input 
-                    id="duedate"
-                    type="date" 
-                  />
-                </div>
-              </div>
-            </form>
+            {this.todoForm()}
           </div>
+          <EditText value="start" type="text" />
+          <EditText value="" type="date" />
         </div>
       </div>
     )
