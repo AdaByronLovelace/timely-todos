@@ -1,8 +1,9 @@
 {
-  "name": "timely-todos",
-  "version": "0.1.1",
+  "name": "aion",
+  "version": "0.0.1",
   "private": true,
-  "homepage": "https://adabyronlovelace.github.io/timely-todos/",
+  "description": "a tool for writers to organize events in a timeline",
+  "homepage": "https://adabyronlovelace.github.io/aion/",
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

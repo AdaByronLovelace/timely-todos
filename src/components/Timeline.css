@@ -1,0 +1,27 @@
+.event {
+  background: white;
+  border-radius: 5px;
+  padding: 10px;
+  width: auto;
+  margin: 10px; 
+  display: flex;
+  flex-direction: column; 
+}
+.event .name {
+  font-size: 120%;
+  font-weight: bold;
+}
+
+.timeline-container {
+  background: gray;
+}
+
+.app-control {
+  display: flex;
+  flex-direction: row;
+}
+
+.event-form {
+  display: flex;
+  flex-direction: column; 
+}
